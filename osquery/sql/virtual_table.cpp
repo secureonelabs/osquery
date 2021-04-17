@@ -34,8 +34,6 @@ FLAG(bool,
      true,
      "Enable INDEX on all extension table columns (default true)");
 
-FLAG(bool, table_exceptions, false, "Allow tables to throw exceptions");
-
 SHELL_FLAG(bool, planner, false, "Enable osquery runtime planner output");
 
 DECLARE_bool(disable_events);
@@ -1006,9 +1004,6 @@ static int xFilter(sqlite3_vtab_cursor* pVtabCursor,
       LOG(ERROR) << "Exception while executing table " << pVtab->content->name
                  << ": " << e.what();
       setTableErrorMessage(pVtabCursor->pVtab, e.what());
-      if (FLAGS_table_exceptions) {
-        throw;
-      }
       return SQLITE_ERROR;
     }
   } else {

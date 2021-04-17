@@ -1219,24 +1219,11 @@ TEST_F(VirtualTableTests, test_table_exceptions) {
   attachTableInternal(
       "exceptional", exceptional->columnDefinition(false), dbc, false);
 
-  auto backup_flag = FLAGS_table_exceptions;
-  FLAGS_table_exceptions = false;
   {
     QueryData results;
     auto status = queryInternal("SELECT * FROM exceptional", results, dbc);
     EXPECT_FALSE(status.ok());
   }
-
-  FLAGS_table_exceptions = true;
-  {
-    EXPECT_THROW(
-        {
-          QueryData results;
-          queryInternal("SELECT * FROM exceptional", results, dbc);
-        },
-        std::runtime_error);
-  }
-  FLAGS_table_exceptions = backup_flag;
 }
 
 } // namespace osquery
